@@ -11,6 +11,7 @@ import { avalancheFuji } from "viem/chains";
 declare global {
   interface Window {
     ethereum?: EIP1193Provider;
+    avalanche?: EIP1193Provider;
   }
 }
 
@@ -20,13 +21,14 @@ export const publicClient = createPublicClient({
 });
 
 export function getWalletClient() {
-  if (!window.ethereum) {
+  const provider = window.ethereum ?? window.avalanche;
+  if (!provider) {
     throw new Error("No se detecto una wallet compatible. Instala Core o MetaMask.");
   }
 
   return createWalletClient({
     chain: avalancheFuji,
-    transport: custom(window.ethereum)
+    transport: custom(provider)
   });
 }
 
@@ -39,14 +41,15 @@ export async function connectWallet(): Promise<{ address: Address; chainId: numb
 }
 
 export async function switchToFuji() {
-  if (!window.ethereum) {
+  const provider = window.ethereum ?? window.avalanche;
+  if (!provider) {
     throw new Error("No se detecto una wallet compatible.");
   }
 
   const chainId = "0xA869";
 
   try {
-    await window.ethereum.request({
+    await provider.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId }]
     });
@@ -54,7 +57,7 @@ export async function switchToFuji() {
     const providerError = error as { code?: number };
     if (providerError.code !== 4902) throw error;
 
-    await window.ethereum.request({
+    await provider.request({
       method: "wallet_addEthereumChain",
       params: [
         {
