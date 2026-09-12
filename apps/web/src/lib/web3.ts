@@ -1,0 +1,74 @@
+import {
+  createPublicClient,
+  createWalletClient,
+  custom,
+  http,
+  type Address,
+  type EIP1193Provider
+} from "viem";
+import { avalancheFuji } from "viem/chains";
+
+declare global {
+  interface Window {
+    ethereum?: EIP1193Provider;
+  }
+}
+
+export const publicClient = createPublicClient({
+  chain: avalancheFuji,
+  transport: http("https://api.avax-test.network/ext/bc/C/rpc")
+});
+
+export function getWalletClient() {
+  if (!window.ethereum) {
+    throw new Error("No se detecto una wallet compatible. Instala Core o MetaMask.");
+  }
+
+  return createWalletClient({
+    chain: avalancheFuji,
+    transport: custom(window.ethereum)
+  });
+}
+
+export async function connectWallet(): Promise<{ address: Address; chainId: number }> {
+  const client = getWalletClient();
+  const [address] = await client.requestAddresses();
+  if (!address) throw new Error("La wallet no devolvio una direccion.");
+
+  return { address, chainId: await client.getChainId() };
+}
+
+export async function switchToFuji() {
+  if (!window.ethereum) {
+    throw new Error("No se detecto una wallet compatible.");
+  }
+
+  const chainId = "0xA869";
+
+  try {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId }]
+    });
+  } catch (error) {
+    const providerError = error as { code?: number };
+    if (providerError.code !== 4902) throw error;
+
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId,
+          chainName: "Avalanche Fuji C-Chain",
+          nativeCurrency: {
+            name: "AVAX",
+            symbol: "AVAX",
+            decimals: 18
+          },
+          rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
+          blockExplorerUrls: ["https://testnet.snowtrace.io"]
+        }
+      ]
+    });
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "fracciona-avalanche",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "pnpm --filter @fracciona/web dev",
+    "build": "pnpm contracts:compile && pnpm --filter @fracciona/web build",
+    "test": "pnpm --filter @fracciona/contracts test",
+    "contracts:compile": "pnpm --filter @fracciona/contracts compile",
+    "contracts:deploy:fuji": "pnpm --filter @fracciona/contracts deploy:fuji",
+    "contracts:flatten": "pnpm --filter @fracciona/contracts flatten"
+  }
+}

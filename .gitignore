@@ -1,0 +1,15 @@
+node_modules/
+.pnpm-store/
+.env
+.env.local
+apps/web/.env.local
+dist/
+apps/web/dist/
+packages/contracts/artifacts/
+packages/contracts/cache/
+packages/contracts/typechain-types/
+packages/contracts/coverage/
+packages/contracts/deployments/fuji/*.json
+!packages/contracts/deployments/fuji/.gitkeep
+packages/contracts/deployments/PropertyShares.flattened.sol
+tmp/
