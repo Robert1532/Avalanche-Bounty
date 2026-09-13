@@ -1,3 +1,7 @@
 packages:
   - apps/*
   - packages/*
+allowBuilds:
+  esbuild: false
+  keccak: false
+  secp256k1: false

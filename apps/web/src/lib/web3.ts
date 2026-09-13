@@ -21,10 +21,7 @@ export const publicClient = createPublicClient({
 });
 
 export function getWalletClient() {
-  const provider = window.ethereum ?? window.avalanche;
-  if (!provider) {
-    throw new Error("No se detecto una wallet compatible. Instala Core o MetaMask.");
-  }
+  const provider = getWalletProvider();
 
   return createWalletClient({
     chain: avalancheFuji,
@@ -32,10 +29,37 @@ export function getWalletClient() {
   });
 }
 
+export function getWalletProvider() {
+  const provider = window.ethereum ?? window.avalanche;
+  if (!provider) {
+    throw new Error("No se detecto una wallet compatible. Instala Core o MetaMask.");
+  }
+
+  return provider;
+}
+
 export async function connectWallet(): Promise<{ address: Address; chainId: number }> {
   const client = getWalletClient();
   const [address] = await client.requestAddresses();
   if (!address) throw new Error("La wallet no devolvio una direccion.");
+
+  return { address, chainId: await client.getChainId() };
+}
+
+/**
+ * Recupera una cuenta que la extensión ya autorizó, sin abrir el diálogo de
+ * conexión ni almacenar direcciones o credenciales en la aplicación.
+ */
+export async function getConnectedWallet(): Promise<{ address: Address; chainId: number } | undefined> {
+  const provider = window.ethereum ?? window.avalanche;
+  if (!provider) return undefined;
+
+  const client = createWalletClient({
+    chain: avalancheFuji,
+    transport: custom(provider)
+  });
+  const [address] = await client.getAddresses();
+  if (!address) return undefined;
 
   return { address, chainId: await client.getChainId() };
 }
