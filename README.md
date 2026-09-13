@@ -66,3 +66,5 @@ Las instrucciones y la evidencia esperada estan en docs/deployment.md y docs/bou
 El contrato esta preparado y cubierto por pruebas locales. Aun no hay una direccion desplegada ni un contrato verificado: esas son acciones deliberadamente separadas porque requieren una wallet de prueba controlada por el equipo y una transaccion real.
 
 Consulta docs/architecture.md para las decisiones del modelo y docs/security.md antes de ampliar o presentar el proyecto.
+
+testnet.snowtrace.io:https://testnet.snowtrace.io/address/0x8c5Ab83f8541E927B8Ec3aBbdE04ccB07d69A66c
