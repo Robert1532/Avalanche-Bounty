@@ -67,4 +67,4 @@ El contrato esta preparado y cubierto por pruebas locales. Aun no hay una direcc
 
 Consulta docs/architecture.md para las decisiones del modelo y docs/security.md antes de ampliar o presentar el proyecto.
 
-testnet.snowtrace.io:https://testnet.snowtrace.io/address/0x8c5Ab83f8541E927B8Ec3aBbdE04ccB07d69A66c
+LINK CONTRATOS: https://testnet.snowtrace.io/address/0x8c5Ab83f8541E927B8Ec3aBbdE04ccB07d69A66c
